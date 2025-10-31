@@ -35,3 +35,13 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# Ignore sensitive and generated files
+*.log
+*.crt
+*.key
+*.pem
+*.tar.gz
+.kube/
+multipass/
+__pycache__/
