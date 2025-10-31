@@ -43,5 +43,4 @@ terraform.rc
 *.pem
 *.tar.gz
 .kube/
-multipass/
 __pycache__/
