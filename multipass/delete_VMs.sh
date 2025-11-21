@@ -5,9 +5,9 @@ set -eo pipefail
 specs=/tmp/vm-specs
 cat <<EOF > $specs
 controlplane01,2,2048M,10G
-controlplane02,1,2048M,5G
-ingress,1,512M,5G
-node01,2,4096M,5G
+controlplane02,2,2048M,5G
+node01,2,4096M,20G
+ingress,1,2048M,5G
 EOF
 
 for spec in $(cat $specs)
@@ -27,6 +27,6 @@ echo
 cat <<EOF
 Use the following command to do this
 
-  sudo vi /var/db/dhcpd_leases
+  sudo nvim /var/db/dhcpd_leases
 
 EOF

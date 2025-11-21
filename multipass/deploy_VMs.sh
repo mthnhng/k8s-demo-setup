@@ -15,9 +15,9 @@ NC="\033[0m"
 vm_specs=../tmp/vm_specs
 cat <<EOF > $vm_specs
 controlplane01,2,2048M,10G
-controlplane02,1,2048M,5G
+controlplane02,2,2048M,5G
 node01,2,4096M,20G
-ingress,1,512M,5G
+ingress,1,2048M,5G
 EOF
 
 echo -e "${GREEN}Booting the nodes...${NC}"
@@ -51,24 +51,35 @@ hostentries=../tmp/hostentries
 # Add ips to /etc/hosts
 for spec in $(cat $vm_specs)
 do
-    node=$(cut -d ',' -f 1 <<< $spec)
-    ip=$(multipass info $node --format json | jq -r 'first( .info[] | .ipv4[0] )')
-    echo "$ip $node" >> $hostentries
+  node=$(cut -d ',' -f 1 <<< $spec)
+  ip=$(multipass info $node --format json | jq -r 'first( .info[] | .ipv4[0] )')
+  echo "$ip $node" >> $hostentries
 done
 
 # Set up nodes
 for spec in $(cat $vm_specs)
 do
-    node=$(cut -d ',' -f 1 <<< $spec)
-    multipass transfer $hostentries $node:/tmp/
-    multipass transfer ./scripts/setup_host.sh $node:/tmp/
-    multipass transfer ./scripts/cert_verify.sh $node:/home/ubuntu/
-    multipass transfer ./scripts/setup_kernel.sh $node:/tmp/
-    multipass exec $node -- chmod +x /tmp/setup_host.sh
-    multipass exec $node -- /tmp/setup_host.sh
+  node=$(cut -d ',' -f 1 <<< $spec)
+  multipass transfer $hostentries $node:/tmp/
+  multipass transfer ./scripts/setup_host.sh $node:/tmp/
+  multipass transfer ./scripts/cert_verify.sh $node:/home/ubuntu/
+  multipass transfer ./scripts/setup_kernel.sh $node:/tmp/
+  multipass transfer ./scripts/k8s_dependencies.sh $node:/tmp/
+  # Execute setup host script on each node
+  multipass exec $node -- chmod +x /tmp/setup_host.sh
+  multipass exec $node -- /tmp/setup_host.sh
+
+  # Execute setup kernel script on each node
+  multipass exec $node -- chmod +x /tmp/setup_kernel.sh
+  multipass exec $node -- /tmp/setup_kernel.sh
+
+  # Install k8s dependencies on each node
+  multipass exec $node -- chmod +x /tmp/k8s_dependencies.sh
+  multipass exec $node -- /tmp/k8s_dependencies.sh
 done
 
 # Config CSR on the controlplane nodes
 multipass transfer ./scripts/approve_csr.sh controlplane01:/home/ubuntu/
 
 echo -e "${GREEN}Done!${NC}"
+

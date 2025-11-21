@@ -16,9 +16,9 @@ sudo systemctl restart sshd
 
 if [ "$(hostname)" = "controlplane01" ]
 then
-    sh -c 'sudo apt update' &> /dev/null
-    sh -c 'sudo apt-get install -y sshpass' &> /dev/null
- fi
+  sh -c 'sudo apt update' &> /dev/null
+  sh -c 'sudo apt-get install -y sshpass' &> /dev/null
+fi
 
 # Set password for ubuntu user (it's something random by default)
 echo 'ubuntu:ubuntu' | sudo chpasswd

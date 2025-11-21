@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 
 # Step 2 - Set up Operating System Prerequisites
 
