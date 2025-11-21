@@ -5,8 +5,7 @@ set -eo pipefail
 specs=/tmp/vm-specs
 cat <<EOF > $specs
 controlplane01,2,2048M,10G
-controlplane02,2,2048M,5G
-node01,2,4096M,20G
+node01,3,6144M,20G
 ingress,1,2048M,5G
 EOF
 

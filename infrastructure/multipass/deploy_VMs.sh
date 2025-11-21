@@ -15,8 +15,7 @@ NC="\033[0m"
 vm_specs=../tmp/vm_specs
 cat <<EOF > $vm_specs
 controlplane01,2,2048M,10G
-controlplane02,2,2048M,5G
-node01,2,4096M,20G
+node01,3,6144M,20G
 ingress,1,2048M,5G
 EOF
 

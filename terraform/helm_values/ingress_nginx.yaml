@@ -1,0 +1,7 @@
+controller:
+  hostNetwork: true
+  kind: DaemonSet
+  service:
+    type: ClusterIP
+  nodeSelector:
+    kubernetes.io/hostname: ingress
