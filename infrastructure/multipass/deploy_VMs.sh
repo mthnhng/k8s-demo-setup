@@ -12,7 +12,7 @@ NC="\033[0m"
 
 
 # Define VMs specs
-vm_specs=../tmp/vm_specs
+vm_specs=../../tmp/vm_specs
 cat <<EOF > $vm_specs
 controlplane01,2,2048M,10G
 node01,3,6144M,20G
@@ -43,9 +43,8 @@ do
 done
 
 # Create host file entries
-echo -e "${BLUE}Provisioning...${NC}"
-hostentries=../tmp/hostentries
-[ -f hostentries ] && rm -f $hostentries
+hostentries=../../tmp/hostentries
+> $hostentries
 
 # Add ips to /etc/hosts
 for spec in $(cat $vm_specs)
